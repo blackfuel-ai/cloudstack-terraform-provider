@@ -83,6 +83,12 @@ func resourceCloudStackPhysicalNetwork() *schema.Resource {
 				Required:    true,
 				ForceNew:    true,
 			},
+			"state": {
+				Description: "the state of the physical network",
+				Type:        schema.TypeString,
+				Default:     "Disabled",
+				Optional:    true,
+			},
 		},
 	}
 }
@@ -124,6 +130,15 @@ func resourceCloudStackPhysicalNetworkCreate(d *schema.ResourceData, meta interf
 		return err
 	}
 
+	if v, ok := d.GetOk("state"); ok && strings.ToLower(v.(string)) == "enabled" {
+		up := cs.Network.NewUpdatePhysicalNetworkParams(r.Id)
+		up.SetState("Enabled")
+		_, err := cs.Network.UpdatePhysicalNetwork(up)
+		if err != nil {
+			return fmt.Errorf("Error enabling physical network after creation: %s", err)
+		}
+	}
+
 	d.SetId(r.Id)
 
 	return resourceCloudStackPhysicalNetworkRead(d, meta)
@@ -149,6 +164,7 @@ func resourceCloudStackPhysicalNetworkRead(d *schema.ResourceData, meta interfac
 	d.Set("tags", p.Tags)
 	d.Set("vlan", p.Vlan)
 	d.Set("zone_id", p.Zoneid)
+	d.Set("state", p.State)
 
 	return nil
 }
@@ -166,10 +182,13 @@ func resourceCloudStackPhysicalNetworkUpdate(d *schema.ResourceData, meta interf
 	if v, ok := d.GetOk("vlan"); ok {
 		p.SetVlan(v.(string))
 	}
+	if v, ok := d.GetOk("state"); ok {
+		p.SetState(v.(string))
+	}
 
 	_, err := cs.Network.UpdatePhysicalNetwork(p)
 	if err != nil {
-		return fmt.Errorf("Error deleting physical network: %s", err)
+		return fmt.Errorf("Error updating physical network: %s", err)
 	}
 
 	return resourceCloudStackPhysicalNetworkRead(d, meta)

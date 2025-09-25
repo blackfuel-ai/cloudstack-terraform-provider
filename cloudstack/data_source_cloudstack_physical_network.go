@@ -62,6 +62,10 @@ func dataSourceCloudStackPhysicalNetwork() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
+			"state": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
 		},
 	}
 }
@@ -101,6 +105,7 @@ func physicalNetworkDescriptionAttributes(d *schema.ResourceData, physicalNetwor
 	d.Set("broadcast_domain_range", physicalNetwork.Broadcastdomainrange)
 	d.Set("network_speed", physicalNetwork.Networkspeed)
 	d.Set("vlan", physicalNetwork.Vlan)
+	d.Set("state", physicalNetwork.State)
 
 	// Set isolation methods
 	if physicalNetwork.Isolationmethods != "" {
