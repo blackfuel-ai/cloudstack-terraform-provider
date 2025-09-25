@@ -118,6 +118,12 @@ func resourceCloudStackZone() *schema.Resource {
 				Optional:    true,
 				ForceNew:    true,
 			},
+			"type": {
+				Description: "the type of the zone, can be Edge or Core",
+				Type:        schema.TypeString,
+				Optional:    true,
+				ForceNew:    true,
+			},
 		},
 	}
 }
@@ -156,6 +162,10 @@ func resourceCloudStackZoneCreate(d *schema.ResourceData, meta interface{}) erro
 	if v, ok := d.GetOk("security_group_enabled"); ok {
 		p.SetSecuritygroupenabled(v.(bool))
 	}
+	if v, ok := d.GetOk("type"); ok {
+		zoneType := v.(string)
+		p.SetIsedge(zoneType == "Edge")
+	}
 
 	// Create zone
 	r, err := cs.Zone.CreateZone(p)
@@ -191,6 +201,10 @@ func resourceCloudStackZoneRead(d *schema.ResourceData, meta interface{}) error 
 	d.Set("name", z.Name)
 	d.Set("network_type", z.Networktype)
 	d.Set("security_group_enabled", z.Securitygroupsenabled)
+	// Debug: print the actual Type value and other relevant fields using log package
+	//log.Printf("DEBUG: Zone %s has Type: '%s', ID: %s", z.Name, z.Type, z.Id)
+	//log.Printf("DEBUG: Zone %s full struct: %+v", z.Name, z)
+	d.Set("type", z.Type)
 
 	return nil
 }

@@ -53,6 +53,10 @@ func dataSourceCloudStackZone() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
+			"type": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
 		},
 	}
 }
@@ -92,6 +96,7 @@ func zoneDescriptionAttributes(d *schema.ResourceData, zone *cloudstack.Zone) er
 	d.Set("dns1", zone.Dns1)
 	d.Set("internal_dns1", zone.Internaldns1)
 	d.Set("network_type", zone.Networktype)
+	d.Set("type", zone.Type)
 
 	return nil
 }

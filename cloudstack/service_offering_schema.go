@@ -108,6 +108,33 @@ func serviceOfferingMergeCommonSchema(s1 map[string]schema.Attribute) map[string
 			},
 			Default: booldefault.StaticBool(false),
 		},
+		"ha_enabled": schema.BoolAttribute{
+			Description: "The HA for the service offering (alias for offer_ha)",
+			Optional:    true,
+			Computed:    true,
+			PlanModifiers: []planmodifier.Bool{
+				boolplanmodifier.RequiresReplace(),
+			},
+			Default: booldefault.StaticBool(false),
+		},
+		"is_system": schema.BoolAttribute{
+			Description: "Indicates if this is a system VM offering",
+			Optional:    true,
+			Computed:    true,
+			PlanModifiers: []planmodifier.Bool{
+				boolplanmodifier.RequiresReplace(),
+			},
+			Default: booldefault.StaticBool(false),
+		},
+		"system_use": schema.BoolAttribute{
+			Description: "Indicates if this is a system VM offering (alias for is_system)",
+			Optional:    true,
+			Computed:    true,
+			PlanModifiers: []planmodifier.Bool{
+				boolplanmodifier.RequiresReplace(),
+			},
+			Default: booldefault.StaticBool(false),
+		},
 		"zone_ids": schema.SetAttribute{
 			Description: "The ID of the zone(s)",
 			Optional:    true,

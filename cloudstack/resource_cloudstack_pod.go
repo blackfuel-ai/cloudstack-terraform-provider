@@ -50,7 +50,7 @@ func resourceCloudStackPod() *schema.Resource {
 			"gateway": {
 				Description: "the gateway for the Pod",
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
 			},
 			"name": {
 				Description: "the name of the Pod",
@@ -60,12 +60,12 @@ func resourceCloudStackPod() *schema.Resource {
 			"netmask": {
 				Description: "the netmask for the Pod",
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
 			},
 			"start_ip": {
 				Description: "the starting IP address for the Pod",
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
 			},
 			"zone_id": {
 				Description: "the Zone ID in which the Pod will be created",

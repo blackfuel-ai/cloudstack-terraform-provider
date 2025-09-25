@@ -126,6 +126,13 @@ func resourceCloudStackTemplate() *schema.Resource {
 				Default:  300,
 			},
 
+			"directdownload": {
+				Description: "true if template should bypass Secondary Storage and be downloaded to Primary Storage on deployment",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+			},
+
 			"tags": tagsSchema(),
 		},
 	}
@@ -180,6 +187,10 @@ func resourceCloudStackTemplateCreate(d *schema.ResourceData, meta interface{}) 
 
 	if v, ok := d.GetOk("password_enabled"); ok {
 		p.SetPasswordenabled(v.(bool))
+	}
+
+	if v, ok := d.GetOk("directdownload"); ok {
+		p.SetDirectdownload(v.(bool))
 	}
 
 	// Retrieve the zone ID

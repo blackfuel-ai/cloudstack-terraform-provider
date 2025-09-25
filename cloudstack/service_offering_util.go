@@ -104,6 +104,9 @@ func (state *serviceOfferingCommonResourceModel) commonRead(ctx context.Context,
 	state.IsVolatile = types.BoolValue(cs.Isvolatile)
 	state.LimitCpuUse = types.BoolValue(cs.Limitcpuuse)
 	state.OfferHa = types.BoolValue(cs.Offerha)
+	state.HaEnabled = types.BoolValue(cs.Offerha) // Alias for offer_ha
+	state.IsSystem = types.BoolValue(cs.Issystem)
+	state.SystemUse = types.BoolValue(cs.Issystem) // Alias for is_system
 
 }
 
@@ -201,6 +204,17 @@ func (plan *serviceOfferingCommonResourceModel) commonCreateParams(ctx context.C
 	}
 	if !plan.OfferHa.IsNull() {
 		p.SetOfferha(plan.OfferHa.ValueBool())
+	}
+	// Handle ha_enabled alias
+	if !plan.HaEnabled.IsNull() {
+		p.SetOfferha(plan.HaEnabled.ValueBool())
+	}
+	if !plan.IsSystem.IsNull() {
+		p.SetIssystem(plan.IsSystem.ValueBool())
+	}
+	// Handle system_use alias
+	if !plan.SystemUse.IsNull() {
+		p.SetIssystem(plan.SystemUse.ValueBool())
 	}
 	if !plan.ZoneIds.IsNull() {
 		zoneIds := make([]string, len(plan.ZoneIds.Elements()))

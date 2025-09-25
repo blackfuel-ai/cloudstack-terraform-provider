@@ -54,10 +54,8 @@ func resourceCloudStackStaticRouteCreate(d *schema.ResourceData, meta interface{
 	cs := meta.(*cloudstack.CloudStackClient)
 
 	// Create a new parameter struct
-	p := cs.VPC.NewCreateStaticRouteParams(
-		d.Get("cidr").(string),
-		d.Get("gateway_id").(string),
-	)
+	p := cs.VPC.NewCreateStaticRouteParams(d.Get("cidr").(string))
+	p.SetGatewayid(d.Get("gateway_id").(string))
 
 	// Create the new private gateway
 	r, err := cs.VPC.CreateStaticRoute(p)
