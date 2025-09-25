@@ -40,6 +40,7 @@ func resourceCloudStackPod() *schema.Resource {
 				Description: "Allocation state of this Pod for allocation of new resources",
 				Type:        schema.TypeString,
 				Optional:    true,
+				Computed:    true,
 			},
 			"end_ip": {
 				Description: "he ending IP address for the Pod",
@@ -61,6 +62,7 @@ func resourceCloudStackPod() *schema.Resource {
 				Description: "the netmask for the Pod",
 				Type:        schema.TypeString,
 				Optional:    true,
+				Computed:    true,
 			},
 			"start_ip": {
 				Description: "the starting IP address for the Pod",
