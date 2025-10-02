@@ -17,7 +17,7 @@
 
 module github.com/terraform-providers/terraform-provider-cloudstack
 
-replace github.com/apache/cloudstack-go/v2 => /home/matthieu/blackfuel/cloudstack-go
+replace github.com/apache/cloudstack-go/v2 => /home/matthieu/dev/cloudstack-go
 
 require (
 	github.com/apache/cloudstack-go/v2 v2.17.1
