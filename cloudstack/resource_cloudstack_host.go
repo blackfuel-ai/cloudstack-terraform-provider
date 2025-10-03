@@ -180,17 +180,26 @@ func resourceCloudStackHostCreate(d *schema.ResourceData, meta interface{}) erro
 		p.SetPassword(password.(string))
 	}
 
+	// Try immediately first, then retry every 5 seconds if needed
+	log.Printf("[DEBUG] Trying to create host %s", d.Get("url").(string))
+	host, err := cs.Host.AddHost(p)
+	if err == nil && host.Id != "" {
+		log.Printf("[DEBUG] Host %s successfully created", url)
+		d.SetId(host.Id)
+		return resourceCloudStackHostRead(d, meta)
+	}
+
+	// If first attempt failed, retry with backoff
 	timeout := time.After(time.Duration(d.Get("create_timeout").(int)) * time.Second)
 	tick := time.NewTicker(5 * time.Second)
-	var err error
-	var host *cloudstack.AddHostResponse
+	defer tick.Stop()
 
 	for {
 		select {
 		case <-timeout:
 			return fmt.Errorf("timeout waiting for Host to be created, with error: %s", err)
 		case <-tick.C:
-			log.Printf("[DEBUG] Trying to create host %s", d.Get("url").(string))
+			log.Printf("[DEBUG] Retrying to create host %s", d.Get("url").(string))
 			host, err = cs.Host.AddHost(p)
 			if err != nil {
 				log.Printf("[ERROR] Error creating host %s: %s. Will try again...", d.Get("url").(string), err)
