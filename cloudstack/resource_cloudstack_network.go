@@ -111,7 +111,7 @@ func resourceCloudStackNetwork() *schema.Resource {
 			},
 
 			"vlan": {
-				Type:     schema.TypeInt,
+				Type:     schema.TypeString,
 				Optional: true,
 				ForceNew: true,
 			},
@@ -215,7 +215,7 @@ func resourceCloudStackNetworkCreate(d *schema.ResourceData, meta interface{}) e
 	}
 
 	if vlan, ok := d.GetOk("vlan"); ok {
-		p.SetVlan(strconv.Itoa(vlan.(int)))
+		p.SetVlan(vlan.(string))
 	}
 
 	// Check is this network needs to be created in a VPC
