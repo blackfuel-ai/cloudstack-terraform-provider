@@ -23,7 +23,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"strconv"
 	"strings"
 
 	"github.com/apache/cloudstack-go/v2/cloudstack"
